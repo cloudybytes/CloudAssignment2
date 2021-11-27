@@ -25,6 +25,11 @@ while True:
             else:
                 if containerStatus[container.id] == 0:
                     # Send request to CSS to restart service
+                    body = {
+                        'action': 'restart',
+                        'id': container.id
+                    }
+                    response = requests.post('http://127.0.0.1:8001/action')
                 else:
                     containerStatus[container.id] = 0
             body[container.id] = {
