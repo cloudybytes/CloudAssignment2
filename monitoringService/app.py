@@ -17,21 +17,22 @@ while True:
             memoryLimit = containerStats['memory_stats']['limit']
             memoryMaxUsed = containerStats['memory_stats']['max_usage']
             memoryUsed = containerStats['memory_stats']['usage']
-            port = container.labels['port']
+            # port = container.labels['port']
             # Get ip from database
-            response = requests.get('http://127.0.0.1:8001/health')
-            if response.status_code == 200:
-                containerStatus[container.id] = time.time()
-            else:
-                if containerStatus[container.id] == 0:
-                    # Send request to CSS to restart service
-                    body = {
-                        'action': 'restart',
-                        'id': container.id
-                    }
-                    response = requests.post('http://127.0.0.1:8001/action')
-                else:
-                    containerStatus[container.id] = 0
+            # response = requests.get('http://127.0.0.1:8001/health')
+            # if response.status_code == 200:
+            #     containerStatus[container.id] = time.time()
+            # else:
+            #     if containerStatus[container.id] == 0:
+            #         # Send request to CSS to restart service
+            #         body = {
+            #             'action': 'restart',
+            #             'id': container.id
+            #         }
+            #         response = requests.post('http://127.0.0.1:8001/action', json=body)
+            #     else:
+            #         containerStatus[container.id] = 0
+            print('Inside Body')
             body[container.id] = {
                 'service': container.labels['service'],
                 'cpu_usage': cpuUseage,
@@ -39,8 +40,8 @@ while True:
                 'max_used': memoryMaxUsed,
                 'mem_usage': memoryUsed
             }
-            # Send body to Auto-Scaler
         else:
             containerStats = container.stats(stream=False)
-            print(json.dumps(containerStats, indent=3, sort_keys=True))
+    print(body)
+    requests.post('http://127.0.0.1:8001/updateData', json=body)
     time.sleep(5)
