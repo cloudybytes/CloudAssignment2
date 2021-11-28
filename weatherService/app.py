@@ -1,8 +1,20 @@
 import csv
-from flask import Flask
+from flask import Flask, request
 
 app = Flask(__name__)
 
+health = {"health" : "healthy"}
+
+@app.route('/health')
+def health_check():
+    return health
+
+@app.route('/toggle_health', methods = ['POST'])
+def toggle_health():
+    print(request.form.get("health"))
+    health["health"] = request.form.get("health")
+    return health
+    
 @app.route('/')
 def weather_forecast():
 
