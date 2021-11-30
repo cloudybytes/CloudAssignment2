@@ -10,7 +10,6 @@ def health_check():
 
 @app.route('/toggle_health', methods = ['POST'])
 def toggle_health():
-    print(request.form.get("health"))
     health["health"] = request.form.get("health")
     return health
 
