@@ -1,9 +1,13 @@
 from flask import Flask, request
+from multiprocessing import Value
 import time
 
+counter = Value('i', 0)
 app = Flask(__name__)
 
 health = {"health" : "healthy"}
+
+
 
 @app.route('/health')
 def health_check():
@@ -14,6 +18,9 @@ def toggle_health():
     health["health"] = request.form.get("health")
     return health
 
+@app.route('/count', methods= ['GET'])
+def count_requests():
+    return str(counter.value)
 
 @app.route('/')
 def hello():
@@ -21,6 +28,8 @@ def hello():
 
 @app.route('/<int:kg>')
 def temp_conversion(kg):
+    with counter.get_lock():
+        counter.value += 1
     g = kg*1000
     time.sleep(5)
     return str(g)
