@@ -48,7 +48,7 @@ def weather_forecast():
             print('Error: ', FirstRow)
 
     print()
-    return "hello!"
+    return "Temperature is 68.7 F"
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8005, debug=True)
